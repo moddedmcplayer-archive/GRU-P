@@ -39,12 +39,16 @@ namespace GRU_P
         private void RegisterEvents()
         {
             EventHandler = new EventHandlers(this);
+            Player.Dying += EventHandler.OnDying;
+            Player.ChangingRole += EventHandler.OnChangingRole;
             Server.EndingRound += EventHandler.OnEndingRound;
         }
 
         private void UnRegisterEvents()
         {
             Server.EndingRound -= EventHandler.OnEndingRound;
+            Player.ChangingRole -= EventHandler.OnChangingRole;
+            Player.Dying -= EventHandler.OnDying;
             EventHandler = null;
         }
     }

@@ -42,7 +42,7 @@ namespace GRU_P
             Timing.CallDelayed(1.7f, () => player.Position = new Vector3(0f, 1002f, 8f));
         }
         
-        public static void DestroySH(Player player)
+        public static void DestroyGRUP(Player player)
         {
             player.SessionVariables.Remove("IsGRUP");
             player.MaxHealth = default;

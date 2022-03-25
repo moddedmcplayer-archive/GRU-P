@@ -23,15 +23,23 @@ namespace GRU_P
         {
             if (API.IsGRUP(ev.Target))
             {
-                API.DestroySH(ev.Target);
-                return;
+                API.DestroyGRUP(ev.Target);
+            }
+        }
+
+        public void OnDying(DyingEventArgs ev)
+        {
+            if (API.IsGRUP(ev.Killer) && ev.Target.Role.Team == Team.SCP)
+            {
+                ev.IsAllowed = false;
+                ev.Target.Kill(ev.Handler.Type, $"{ev.Target.Role.Type} was killed by GRUP");
             }
         }
 
         public void OnChangingRole(ChangingRoleEventArgs ev)
         {
             if (API.IsGRUP(ev.Player) && ev.NewRole != RoleType.Tutorial)
-                API.DestroySH(ev.Player);
+                API.DestroyGRUP(ev.Player);
         }
         
         public EventHandlers(Plugin plugin)
