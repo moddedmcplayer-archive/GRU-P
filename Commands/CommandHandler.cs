@@ -8,6 +8,8 @@ namespace GRU_P.Commands
     [CommandHandler(typeof(RemoteAdminCommandHandler))]
     public class CommandHandler : ParentCommand
     {
+        public CommandHandler() => LoadGeneratedCommands();
+        
         public override string Command => "grup";
         public override string[] Aliases => Array.Empty<string>();
         public override string Description => "Parent command for GRU-P";
