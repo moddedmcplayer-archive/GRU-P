@@ -3,12 +3,12 @@ using CommandSystem;
 using Exiled.Permissions.Extensions;
 using Exiled.API.Features;
 
-namespace GRU_P.Commands
+namespace GRU_P.Commands.Subcmds
 {
     public class Spawn : ICommand
     {
         public string Command { get; } = "spawn";
-        public string[] Aliases { get; } = { };
+        public string[] Aliases { get; } = Array.Empty<String>();
         public string Description { get; } = "Makes player a GRU-P Agent";
         
         public bool Execute(ArraySegment<string> arguments, ICommandSender sender, out string response)

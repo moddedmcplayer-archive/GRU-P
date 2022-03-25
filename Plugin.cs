@@ -17,7 +17,7 @@ namespace GRU_P
         
         public override string Author { get; } = "moddedmcplayer";
         public override string Name { get; } = "GRU-P";
-        public override Version Version { get; } = new Version(0, 0, 1);
+        public override Version Version { get; } = new Version(0, 0, 2);
         public override Version RequiredExiledVersion { get; } = new Version(5, 0, 0);
 
         public EventHandlers EventHandler;
