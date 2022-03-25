@@ -26,7 +26,7 @@ namespace GRU_P
             player.MaxHealth = 120;
             player.UnitName = $"GRU-{UnityEngine.Random.Range(1, 50)}";
             player.CustomInfo = "GRU-P Agent";
-
+            
             player.ReferenceHub.nicknameSync.ShownPlayerInfo &= ~PlayerInfoArea.Nickname;
             player.ReferenceHub.nicknameSync.ShownPlayerInfo &= ~PlayerInfoArea.UnitName;
             player.ReferenceHub.nicknameSync.ShownPlayerInfo &= ~PlayerInfoArea.Role;

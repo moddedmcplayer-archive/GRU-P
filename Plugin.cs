@@ -24,12 +24,14 @@ namespace GRU_P
 
         public override void OnEnabled()
         {
+            Singleton = this;
             RegisterEvents(); 
             base.OnEnabled();
         }
 
         public override void OnDisabled()
         {
+            Singleton = null;
             UnRegisterEvents();
             base.OnDisabled();
         }

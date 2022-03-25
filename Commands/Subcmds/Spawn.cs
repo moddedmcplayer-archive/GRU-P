@@ -10,7 +10,7 @@ namespace GRU_P.Commands.Subcmds
         public string Command { get; } = "spawn";
         public string[] Aliases { get; } = Array.Empty<String>();
         public string Description { get; } = "Makes player a GRU-P Agent";
-        
+
         public bool Execute(ArraySegment<string> arguments, ICommandSender sender, out string response)
         {
             if (arguments.Count == 0)
