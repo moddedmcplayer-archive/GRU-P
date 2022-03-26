@@ -10,7 +10,7 @@ namespace GRU_P
         public bool IsEnabled { get; set; } = true;
         
         [Description("Items GRU-P agents spawn with")]
-        public List<string> SpawnItems { get; set; } = new List<string>
+        public List<string> SpawnItemsAgent { get; set; } = new List<string>
         {
             "GunAK",
             "KeycardChaosInsurgency",
@@ -21,7 +21,41 @@ namespace GRU_P
         };
         
         [Description("Ammo types GRU-P agents spawn with")]
-        public Dictionary<AmmoType, ushort> SpawnAmmo { get; set; } = new Dictionary<AmmoType, ushort>()
+        public Dictionary<AmmoType, ushort> SpawnAmmoAgent { get; set; } = new Dictionary<AmmoType, ushort>()
+        {
+            { AmmoType.Nato762, 90 },
+        };
+        
+        [Description("Items GRU-P troopers spawn with")]
+        public List<string> SpawnItemsTrooper { get; set; } = new List<string>
+        {
+            "GunAK",
+            "KeycardChaosInsurgency",
+            "Radio",
+            "Medkit",
+            "Painkillers",
+            "ArmorCombat"
+        };
+        
+        [Description("Ammo types GRU-P troopers spawn with")]
+        public Dictionary<AmmoType, ushort> SpawnAmmoTrooper { get; set; } = new Dictionary<AmmoType, ushort>()
+        {
+            { AmmoType.Nato762, 90 },
+        };
+        
+        [Description("Items GRU-P commissar spawn with")]
+        public List<string> SpawnItemsCommissar { get; set; } = new List<string>
+        {
+            "GunAK",
+            "KeycardChaosInsurgency",
+            "Radio",
+            "Medkit",
+            "Painkillers",
+            "ArmorCombat"
+        };
+        
+        [Description("Ammo types GRU-P commissar spawn with")]
+        public Dictionary<AmmoType, ushort> SpawnAmmoCommissar { get; set; } = new Dictionary<AmmoType, ushort>()
         {
             { AmmoType.Nato762, 90 },
         };

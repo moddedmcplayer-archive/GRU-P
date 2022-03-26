@@ -11,7 +11,7 @@ namespace GRU_P
         public void OnEndingRound(EndingRoundEventArgs ev)
         {
             bool scpAlive = API.CountRoles(Team.SCP) > 0;
-            bool grupAlive = API.GetSHPlayers().Count > 0;
+            bool grupAlive = API.GetGRUPPlayers().Count > 0;
 
             if (grupAlive && scpAlive)
             {

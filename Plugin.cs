@@ -40,6 +40,7 @@ namespace GRU_P
         {
             EventHandler = new EventHandlers(this);
             Player.Dying += EventHandler.OnDying;
+            Player.Died += EventHandler.OnDied;
             Player.ChangingRole += EventHandler.OnChangingRole;
             Server.EndingRound += EventHandler.OnEndingRound;
         }
@@ -47,6 +48,7 @@ namespace GRU_P
         private void UnRegisterEvents()
         {
             Server.EndingRound -= EventHandler.OnEndingRound;
+            Player.Died -= EventHandler.OnDied;
             Player.ChangingRole -= EventHandler.OnChangingRole;
             Player.Dying -= EventHandler.OnDying;
             EventHandler = null;
