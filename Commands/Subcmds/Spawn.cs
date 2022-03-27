@@ -15,14 +15,24 @@ namespace GRU_P.Commands.Subcmds
 
         public bool Execute(ArraySegment<string> arguments, ICommandSender sender, out string response)
         {
+            if (!sender.CheckPermission("grup.spawn"))
+            {
+                response = "You don't have permission to execute this command. Required permission: grup.spawn";
+                return false;
+            }
+            
             if (arguments.Count == 0)
             {
                 Player ply = Player.Get(sender);
 
                 if (API.IsGRUP(ply))
                 {
-                    response = "You are already a GRU-P commissar!";
-                    return false;
+                    if (API.GetGRUPType(ply) == "commissar")
+                    {
+                        response = $"You are already a GRU-P commissar!";
+                        return false;
+                    }
+                    ply.SessionVariables.Remove("IsGRUP");
                 }
 
                 API.SpawnPlayer(ply, "commissar");
@@ -30,27 +40,33 @@ namespace GRU_P.Commands.Subcmds
                 return true;
             }
             
-            Player player = Player.Get(arguments.At(0));
-            string type = arguments.At(1).ToLower();
+            string type = arguments.At(0).ToLower();
 
             if (arguments.Count == 1)
             {
+                Player ply = Player.Get(sender);
+                
                 if (!types.Contains(type))
                 {
                     response = "Invalid argument. Please enter a valid type!";
                     return false;
                 }
 
-                if (API.IsGRUP(player) && API.GetGRUPType(player) == type)
+                if (API.IsGRUP(ply))
                 {
-                    response = $"You are already a GRU-P {type}!";
-                    return false;
+                    if (API.GetGRUPType(ply) == type)
+                    {
+                        response = $"You are already a GRU-P {type}!";
+                        return false;
+                    }
+                    ply.SessionVariables.Remove("IsGRUP");
                 }
-
-                API.SpawnPlayer(player, type);
-                response = $"You are now a GRU-P commissar.";
+                API.SpawnPlayer(ply, type);
+                response = $"You are now a GRU-P {type}.";
                 return true;
             }
+            
+            Player player = Player.Get(arguments.At(1));
             
             if (player == null)
             {
@@ -64,10 +80,14 @@ namespace GRU_P.Commands.Subcmds
                 return false;
             }
 
-            if (API.IsGRUP(player) && API.GetGRUPType(player) == type)
+            if (API.IsGRUP(player))
             {
-                response = $"({player.Id}) {player.Nickname} is already a GRU-P {type}!";
-                return false;
+                if (API.GetGRUPType(player) == type)
+                {
+                    response = $"({player.Id}) {player.Nickname} is already a GRU-P {type}!";
+                    return false;
+                }
+                player.SessionVariables.Remove("IsGRUP");
             }
 
             API.SpawnPlayer(player, type);

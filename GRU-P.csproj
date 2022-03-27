@@ -115,6 +115,7 @@
     <ItemGroup>
         <Compile Include="API.cs" />
         <Compile Include="Commands\CommandHandler.cs" />
+        <Compile Include="Commands\Subcmds\Help.cs" />
         <Compile Include="Commands\Subcmds\Spawn.cs" />
         <Compile Include="Commands\Subcmds\SpawnTeam.cs" />
         <Compile Include="Config.cs" />

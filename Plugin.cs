@@ -8,6 +8,7 @@ using Exiled.API.Features;
 using Exiled.Events.Handlers;
 using Player = Exiled.Events.Handlers.Player;
 using Server = Exiled.Events.Handlers.Server;
+using Map = Exiled.Events.Handlers.Map;
 
 namespace GRU_P
 {
@@ -17,7 +18,7 @@ namespace GRU_P
         
         public override string Author { get; } = "moddedmcplayer";
         public override string Name { get; } = "GRU-P";
-        public override Version Version { get; } = new Version(0, 0, 2);
+        public override Version Version { get; } = new Version(0, 2, 1);
         public override Version RequiredExiledVersion { get; } = new Version(5, 0, 0);
 
         public EventHandlers EventHandler;
@@ -39,18 +40,20 @@ namespace GRU_P
         private void RegisterEvents()
         {
             EventHandler = new EventHandlers(this);
-            Player.Dying += EventHandler.OnDying;
             Player.Died += EventHandler.OnDied;
             Player.ChangingRole += EventHandler.OnChangingRole;
+            Server.RespawningTeam += EventHandler.OnSpawn;
             Server.EndingRound += EventHandler.OnEndingRound;
+            Map.AnnouncingScpTermination += EventHandler.OnAnnouncingScpTerminationEvent;
         }
 
         private void UnRegisterEvents()
         {
-            Server.EndingRound -= EventHandler.OnEndingRound;
             Player.Died -= EventHandler.OnDied;
             Player.ChangingRole -= EventHandler.OnChangingRole;
-            Player.Dying -= EventHandler.OnDying;
+            Server.RespawningTeam -= EventHandler.OnSpawn;
+            Server.EndingRound -= EventHandler.OnEndingRound;
+            Map.AnnouncingScpTermination -= EventHandler.OnAnnouncingScpTerminationEvent;
             EventHandler = null;
         }
     }

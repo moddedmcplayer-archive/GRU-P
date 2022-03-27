@@ -13,7 +13,7 @@ namespace GRU_P
         private static Plugin plugin = Plugin.Singleton;
         private static Config cfg = Plugin.Singleton.Config;
             
-        public static bool IsGRUP(Player player) => player.SessionVariables.ContainsKey("IsGRUP");
+        public static bool IsGRUP(Player player) => player != null && player.SessionVariables.ContainsKey("IsGRUP");
         public static string GetGRUPType(Player player) => player.SessionVariables["IsGRUP"].ToString();
         public static List<Player> GetGRUPPlayers() => Player.List.Where(x => x.SessionVariables.ContainsKey("IsGRUP")).ToList();
         public static int CountRoles(Team team) => Player.List.Count(x => x.Role.Team == team && !x.SessionVariables.ContainsKey("IsNPC"));
@@ -23,8 +23,8 @@ namespace GRU_P
         {
             player.SessionVariables.Add("IsGRUP", type);
             player.Role.Type = RoleType.Tutorial;
-            player.Health = 120;
-            player.MaxHealth = 120;
+            player.Health = 100;
+            player.MaxHealth = 100;
             player.UnitName = $"GRUP-{UnityEngine.Random.Range(1, 50)}";
             player.CustomInfo = $"{player.Nickname} - GRU-P {type}";
 
@@ -59,7 +59,8 @@ namespace GRU_P
                         break;
                 }
             });
-            Timing.CallDelayed(1.7f, () => player.Position = new Vector3(0f, 1002f, 8f));
+            Timing.CallDelayed(1.7f, () => player.Position = new Vector3(-31f, 989f, -50f));
+            Timing.CallDelayed(1.0f, () => player.Broadcast(7, $"Youre now a GRU-P {type}, for more information type .grup-help in the console"));
         }
 
         public static void SpawnSquad(int size)
@@ -67,11 +68,18 @@ namespace GRU_P
             List<Player> spec = Player.List.Where(x => x.Role.Team == Team.RIP && !x.IsOverwatchEnabled).ToList();
             spec = spec.OrderBy(x => x.ReferenceHub.characterClassManager.DeathTime).ToList();
             int spawned = 0;
+            string type = "trooper";
+            SpawnPlayer(spec[spec.Count-1], "commissar");
+            spec.RemoveAt(spec.Count-1);
             while(spawned <= size && spec.Count > 0)
             {
-                SpawnPlayer(spec[0], "agent");
+                SpawnPlayer(spec[0], type);
                 spec.RemoveAt(0);
                 spawned++;
+                if (spawned > 4)
+                {
+                    type = "agent";
+                }
             }
         }
         

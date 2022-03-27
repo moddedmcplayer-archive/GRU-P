@@ -8,32 +8,45 @@ namespace GRU_P
     public class Config : IConfig
     {
         public bool IsEnabled { get; set; } = true;
+
+        [Description("Maximum size of a spawn wave")]
+        public int maxSquadSize { get; set; } = 10;
+
+        [Description("The maximum difference between mtf & chaos tickets to trigger GRU-P spawn")]
+        public int differenceTickets = 5;
+
+        [Description("Whether or not to display the help message hint on spawn")]
+        public bool helpMessage = true;
         
         [Description("Items GRU-P agents spawn with")]
         public List<string> SpawnItemsAgent { get; set; } = new List<string>
         {
-            "GunAK",
             "KeycardChaosInsurgency",
-            "Radio",
+            "GunFSP9",
+            "GunRevolver",
+            "GrenadeFlash",
             "Medkit",
             "Painkillers",
-            "ArmorCombat"
+            "Radio",
+            "ArmorLight"
         };
         
         [Description("Ammo types GRU-P agents spawn with")]
         public Dictionary<AmmoType, ushort> SpawnAmmoAgent { get; set; } = new Dictionary<AmmoType, ushort>()
         {
-            { AmmoType.Nato762, 90 },
+            { AmmoType.Nato9, 90 },
+            { AmmoType.Ammo44Cal, 18 },
         };
         
         [Description("Items GRU-P troopers spawn with")]
         public List<string> SpawnItemsTrooper { get; set; } = new List<string>
         {
-            "GunAK",
             "KeycardChaosInsurgency",
-            "Radio",
+            "GunAK",
+            "GrenadeHE",
             "Medkit",
             "Painkillers",
+            "Radio",
             "ArmorCombat"
         };
         
@@ -46,18 +59,21 @@ namespace GRU_P
         [Description("Items GRU-P commissar spawn with")]
         public List<string> SpawnItemsCommissar { get; set; } = new List<string>
         {
-            "GunAK",
             "KeycardChaosInsurgency",
-            "Radio",
+            "GunLogicer",
+            "GunFSP9",
+            "GrenadeHE",
             "Medkit",
             "Painkillers",
-            "ArmorCombat"
+            "Radio",
+            "ArmorHeavy"
         };
         
         [Description("Ammo types GRU-P commissar spawn with")]
         public Dictionary<AmmoType, ushort> SpawnAmmoCommissar { get; set; } = new Dictionary<AmmoType, ushort>()
         {
-            { AmmoType.Nato762, 90 },
+            { AmmoType.Nato762, 120 },
+            { AmmoType.Nato9, 120 }
         };
     }
 }

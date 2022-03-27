@@ -17,6 +17,7 @@ namespace GRU_P.Commands
         public override void LoadGeneratedCommands()
         {
             RegisterCommand(new Spawn());
+            RegisterCommand(new SpawnTeam());
         }
 
         protected override bool ExecuteParent(ArraySegment<string> arguments, ICommandSender sender, out string response)
