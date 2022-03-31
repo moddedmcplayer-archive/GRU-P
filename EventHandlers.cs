@@ -1,16 +1,67 @@
-﻿using Exiled.API.Enums;
+﻿using System.Collections.Generic;
+using System.Linq;
+using System.Timers;
+using Exiled.API.Enums;
 using Exiled.API.Features;
 using Exiled.API.Features.DamageHandlers;
+using Exiled.API.Features.Items;
+using Exiled.CustomItems.API.Features;
 using Exiled.Events.EventArgs;
+using MEC;
 using Respawning;
-using DamageHandlerBase = PlayerStatsSystem.DamageHandlerBase;
-using Player = Exiled.Events.Handlers.Player;
+using UnityEngine;
 
 namespace GRU_P
 {
     public class EventHandlers
     {
         private Config cfg;
+        private CoroutineHandle timerCoroutine = new CoroutineHandle();
+        private new Vector3 EscapeZone = Vector3.zero;
+
+        public void OnRoundStarted()
+        {
+            if (timerCoroutine.IsRunning)
+            {
+                Timing.KillCoroutines(timerCoroutine);
+            }
+
+            timerCoroutine = Timing.RunCoroutine(CheckEscape());
+        }
+        
+        private IEnumerator<float> CheckEscape()
+        {
+            while (Round.IsStarted)
+            {
+                for (;;)
+                {
+                    yield return Timing.WaitForSeconds(1.5f);
+
+                    foreach (Player player in Player.List)
+                    {
+                        if (EscapeZone == Vector3.zero)
+                            EscapeZone = player.GameObject.GetComponent<Escape>().worldPosition;
+
+                        if (!player.IsCuffed || (player.Role.Team == Team.SCP && player.Role.Team == Team.RIP && player.Role.Team == Team.TUT) ||
+                            (EscapeZone - player.Position).sqrMagnitude > 400f)
+                            continue;
+
+                        if (!API.IsGRUP(player.Cuffer))
+                        {
+                            continue;
+                        }
+
+                        List < Item > items = player.Items.ToList();
+                        API.SpawnPlayer(player, "agent");
+                        Timing.WaitForSeconds(1);
+                        foreach (Item item in items)
+                        {
+                            item.Spawn(player.Position, default);
+                        }
+                    }
+                }
+            }
+        }
 
         public void OnEndingRound(EndingRoundEventArgs ev)
         {
@@ -33,7 +84,7 @@ namespace GRU_P
         
         public void OnAnnouncingScpTerminationEvent(AnnouncingScpTerminationEventArgs ev)
         {
-            if (API.IsGRUP(ev.Killer))
+            if (API.IsGRUP(ev.Killer) && ev.Player.Role.Team == Team.SCP)
             {
                 ev.IsAllowed = false;
                 string scpType = null;

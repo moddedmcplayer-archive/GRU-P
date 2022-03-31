@@ -1,7 +1,9 @@
 ﻿using System.Collections.Generic;
 using System.ComponentModel;
 using Exiled.API.Enums;
+using Exiled.API.Features.Items;
 using Exiled.API.Interfaces;
+using GRU_P.Items;
 
 namespace GRU_P
 {
@@ -74,6 +76,22 @@ namespace GRU_P
         {
             { AmmoType.Nato762, 120 },
             { AmmoType.Nato9, 120 }
+        };
+
+        [Description("The GRU-P custom keycard")]
+        public GRUPKeycard CustomCard = new GRUPKeycard { Type = ItemType.KeycardFacilityManager};
+
+        [Description("The permissions of the Keycard")]
+        public List<KeycardPermissions> KeycardPermissionsList = new List<KeycardPermissions>()
+        {
+            KeycardPermissions.ContainmentLevelOne,
+            KeycardPermissions.ContainmentLevelTwo,
+            KeycardPermissions.ArmoryLevelOne,
+            KeycardPermissions.ArmoryLevelTwo,
+            KeycardPermissions.ArmoryLevelThree,
+            KeycardPermissions.Checkpoints,
+            KeycardPermissions.ExitGates,
+            KeycardPermissions.Intercom,
         };
     }
 }

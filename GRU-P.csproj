@@ -120,6 +120,7 @@
         <Compile Include="Commands\Subcmds\SpawnTeam.cs" />
         <Compile Include="Config.cs" />
         <Compile Include="EventHandlers.cs" />
+        <Compile Include="Items\GRUPKeycard.cs" />
         <Compile Include="Plugin.cs" />
         <Compile Include="Properties\AssemblyInfo.cs" />
     </ItemGroup>
