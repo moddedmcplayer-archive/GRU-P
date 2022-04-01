@@ -18,9 +18,11 @@ namespace GRU_P
         private Config cfg;
         private CoroutineHandle timerCoroutine = new CoroutineHandle();
         private new Vector3 EscapeZone = Vector3.zero;
+        private bool SHSpawned = false;
 
         public void OnRoundStarted()
         {
+            SHSpawned = false;
             if (timerCoroutine.IsRunning)
             {
                 Timing.KillCoroutines(timerCoroutine);
@@ -124,6 +126,18 @@ namespace GRU_P
 
         public void OnSpawn(RespawningTeamEventArgs ev)
         {
+            if (!SHSpawned)
+            {
+                foreach (var Player in Player.List)
+                {
+                    if (Player.SessionVariables.ContainsKey("IsSH"))
+                        SHSpawned = false;
+                }
+            }
+            
+            if(SHSpawned)
+                return;
+            
             if ((Respawn.NtfTickets - Respawn.ChaosTickets) < cfg.differenceTickets || (Respawn.ChaosTickets - Respawn.NtfTickets) < cfg.differenceTickets)
             {
                 ev.IsAllowed = false;
