@@ -7,3 +7,5 @@ Replace Chaos Keycard with 'GRU-P-Keycard' in config to use it instead.
 (Same access as CI Keycard, just uses a Facility Manager)
 
 Suggest stuff/bugs in issues.
+
+# credit to MLGdogememe#4856 for the idea
