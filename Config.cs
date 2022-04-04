@@ -82,7 +82,7 @@ namespace GRU_P
         public GRUPKeycard CustomCard = new GRUPKeycard { Type = ItemType.KeycardFacilityManager};
 
         [Description("The permissions of the Keycard")]
-        public List<KeycardPermissions> KeycardPermissionsList = new List<KeycardPermissions>()
+        public KeycardPermissions[] KeycardPermissionsList = new KeycardPermissions[]
         {
             KeycardPermissions.ContainmentLevelOne,
             KeycardPermissions.ContainmentLevelTwo,

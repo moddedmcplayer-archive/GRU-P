@@ -2,7 +2,9 @@
 using System.Linq;
 using Exiled.API.Extensions;
 using Exiled.API.Features;
+using Exiled.API.Features.Items;
 using Exiled.CustomItems.API;
+using Exiled.CustomItems.API.Features;
 using MEC;
 using UnityEngine;
 
@@ -19,6 +21,25 @@ namespace GRU_P
         public static int CountRoles(Team team) => Player.List.Count(x => x.Role.Team == team && !x.SessionVariables.ContainsKey("IsNPC"));
 
 
+        public static void modifyKeycard(Player player, CustomItem cItem)
+        {
+            foreach (Item item in player.Items)
+            {
+                if (cItem.Check(item))
+                {
+                    if (item is Keycard keycard)
+                    {
+                        int perms = 0;
+                        for (int i = 0; i < Plugin.Singleton.Config.KeycardPermissionsList.Length; i++)
+                        {
+                            perms |= (int)Plugin.Singleton.Config.KeycardPermissionsList[i];
+                        }
+                        keycard.Base.Permissions = (Interactables.Interobjects.DoorUtils.KeycardPermissions)perms;
+                    }
+                }
+            }
+        }
+        
         public static void SpawnPlayer(Player player, string type)
         {
             player.SessionVariables.Add("IsGRUP", type);
@@ -60,6 +81,7 @@ namespace GRU_P
                 }
             });
             Timing.CallDelayed(1.7f, () => player.Position = new Vector3(-31f, 989f, -50f));
+            Timing.CallDelayed(1, () => API.modifyKeycard(player, CustomItem.Get(1)));
             Timing.CallDelayed(1.0f, () => player.Broadcast(7, $"Youre now a GRU-P {type}, for more information type .grup-help in the console"));
         }
 
