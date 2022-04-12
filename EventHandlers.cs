@@ -7,6 +7,7 @@ using Exiled.API.Features.DamageHandlers;
 using Exiled.API.Features.Items;
 using Exiled.CustomItems.API.Features;
 using Exiled.Events.EventArgs;
+using Hints;
 using MEC;
 using Respawning;
 using UnityEngine;
@@ -20,6 +21,7 @@ namespace GRU_P
         private new Vector3 EscapeZone = Vector3.zero;
         private bool SHSpawned = false;
 
+        
         public void OnRoundStarted()
         {
             SHSpawned = false;
@@ -28,6 +30,7 @@ namespace GRU_P
                 Timing.KillCoroutines(timerCoroutine);
             }
 
+            API.escapedCount = 0;
             timerCoroutine = Timing.RunCoroutine(CheckEscape());
         }
         
@@ -53,6 +56,7 @@ namespace GRU_P
                             continue;
                         }
 
+                        API.escapedCount += 1;
                         List < Item > items = player.Items.ToList();
                         API.SpawnPlayer(player, "agent");
                         Timing.WaitForSeconds(1);
@@ -73,6 +77,9 @@ namespace GRU_P
             if (grupAlive && scpAlive)
             {
                 ev.IsAllowed = false;
+            }else if (grupAlive && API.escapedCount > 0)
+            {
+                Map.ShowHint("GRU-P also won!", 7);
             }
         }
         

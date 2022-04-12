@@ -20,6 +20,10 @@ namespace GRU_P
         public static List<Player> GetGRUPPlayers() => Player.List.Where(x => x.SessionVariables.ContainsKey("IsGRUP")).ToList();
         public static int CountRoles(Team team) => Player.List.Count(x => x.Role.Team == team && !x.SessionVariables.ContainsKey("IsNPC"));
 
+        public static int escapedCount = 0;
+
+        
+        private static int s => 2;
 
         public static void modifyKeycard(Player player, CustomItem cItem)
         {
