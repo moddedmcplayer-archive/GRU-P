@@ -147,8 +147,13 @@ namespace GRU_P
             
             if ((Respawn.NtfTickets - Respawn.ChaosTickets) < cfg.differenceTickets || (Respawn.ChaosTickets - Respawn.NtfTickets) < cfg.differenceTickets)
             {
-                ev.IsAllowed = false;
-                API.SpawnSquad(ev.Players.Count);
+                if(UnityEngine.Random.Range(1, 101) > Plugin.Singleton.Config.Chance)
+                {
+                    ev.IsAllowed = false;
+                    Respawn.NtfTickets -= 2;
+                    Respawn.ChaosTickets += 2;
+                    API.SpawnSquad(ev.Players.Count);
+                }
             }
         }
         

@@ -19,7 +19,9 @@ namespace GRU_P
 
         [Description("Whether or not to display the help message hint on spawn")]
         public bool helpMessage = true;
-        
+
+        [Description("Chance of gru-p spawning")]
+        public int Chance = 50;
         [Description("Items GRU-P agents spawn with")]
         public List<string> SpawnItemsAgent { get; set; } = new List<string>
         {

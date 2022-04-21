@@ -51,9 +51,7 @@ namespace GRU_P
             player.Health = 100;
             player.MaxHealth = 100;
             player.UnitName = $"GRUP-{UnityEngine.Random.Range(1, 50)}";
-            player.CustomInfo = $"{player.Nickname} - GRU-P {type}";
-
-            player.ReferenceHub.nicknameSync.ShownPlayerInfo &= ~PlayerInfoArea.Nickname;
+            
             player.ReferenceHub.nicknameSync.ShownPlayerInfo &= ~PlayerInfoArea.UnitName;
             player.ReferenceHub.nicknameSync.ShownPlayerInfo &= ~PlayerInfoArea.Role;
             
@@ -85,7 +83,8 @@ namespace GRU_P
                 }
             });
             Timing.CallDelayed(1.7f, () => player.Position = new Vector3(-31f, 989f, -50f));
-            Timing.CallDelayed(1, () => API.modifyKeycard(player, CustomItem.Get(1)));
+            if(Plugin.Singleton.Config.SpawnItemsAgent.Contains("GRU-P-Keycard"))
+                Timing.CallDelayed(1, () => API.modifyKeycard(player, CustomItem.Get(1)));
             Timing.CallDelayed(1.0f, () => player.Broadcast(7, $"Youre now a GRU-P {type}, for more information type .grup-help in the console"));
         }
 
