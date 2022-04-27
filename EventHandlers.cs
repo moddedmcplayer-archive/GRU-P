@@ -120,8 +120,12 @@ namespace GRU_P
                     case RoleType.Scp106:
                         scpType = "SCP 1 0 6";
                         break;
+                    case RoleType.Scp0492:
+                        scpType = null;
+                        break;
                 }
-                Cassie.Message($"{scpType} has been terminated by G R U division P");
+                if(scpType != null)
+                    Cassie.Message($"{scpType} has been terminated by G R U division P");
             }
         }
 
