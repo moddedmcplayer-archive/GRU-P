@@ -4,12 +4,11 @@ using Exiled.API.Features;
 
 namespace GRU_P.Commands.Subcmds
 {
-    [CommandHandler(typeof(ClientCommandHandler))]
     public class Help : ICommand
     {
-        public string Command { get; } = "grup-help";
-        public string[] Aliases { get; } = { "gh" };
-        public string Description { get; } = "Displays a help meesage";
+        public string Command { get; } = "help";
+        public string[] Aliases { get; } = { "h" };
+        public string Description { get; } = "Displays a help message";
 
         public bool Execute(ArraySegment<string> arguments, ICommandSender sender, out string response)
         {

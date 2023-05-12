@@ -1,7 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.ComponentModel;
 using Exiled.API.Enums;
-using Exiled.API.Features.Items;
 using Exiled.API.Interfaces;
 using GRU_P.Items;
 
@@ -10,6 +9,7 @@ namespace GRU_P
     public class Config : IConfig
     {
         public bool IsEnabled { get; set; } = true;
+        public bool Debug { get; set; } = false;
 
         [Description("Maximum size of a spawn wave")]
         public int maxSquadSize { get; set; } = 10;

@@ -14,6 +14,9 @@ using UnityEngine;
 
 namespace GRU_P
 {
+    using Exiled.Events.EventArgs.Map;
+    using Exiled.Events.EventArgs.Player;
+    using Exiled.Events.EventArgs.Server;
     using PlayerRoles;
 
     public class EventHandlers
@@ -61,7 +64,7 @@ namespace GRU_P
                         Timing.WaitForSeconds(1);
                         foreach (Item item in items)
                         {
-                            item.Spawn(player.Position, default);
+                            item.CreatePickup(player.Position);
                         }
                     }
                 }
@@ -75,8 +78,9 @@ namespace GRU_P
 
             if (grupAlive && scpAlive)
             {
-                ev.IsAllowed = false;
-            }else if (grupAlive && API.Escaped > 0)
+                ev.IsRoundEnded = false;
+            }
+            else if (grupAlive && API.Escaped > 0)
             {
                 Map.ShowHint("GRU-P also won!", 7);
             }
@@ -84,15 +88,15 @@ namespace GRU_P
         
         public void OnDied(DiedEventArgs ev)
         {
-            if (API.IsGRUP(ev.Target))
+            if (API.IsGRUP(ev.Player))
             {
-                API.DestroyGRUP(ev.Target);
+                API.DestroyGRUP(ev.Player);
             }
         }
         
         public void OnAnnouncingScpTerminationEvent(AnnouncingScpTerminationEventArgs ev)
         {
-            if (API.IsGRUP(ev.Killer) && ev.Player.Role.Team == Team.SCPs)
+            if (API.IsGRUP(ev.Attacker) && ev.Player.Role.Team == Team.SCPs)
             {
                 ev.IsAllowed = false;
                 string scpType = null;

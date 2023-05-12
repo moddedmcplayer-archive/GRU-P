@@ -1,11 +1,11 @@
-﻿using Exiled.API.Features.Items;
-using Exiled.API.Features.Spawn;
+﻿using Exiled.API.Features.Spawn;
 using Exiled.CustomItems.API.Features;
-using Exiled.Events.EventArgs;
 using MEC;
 
 namespace GRU_P.Items
 {
+    using Exiled.Events.EventArgs.Player;
+
     public class GRUPKeycard : CustomItem
     {
         public override uint Id { get; set; } = 1;
