@@ -14,11 +14,13 @@ using UnityEngine;
 
 namespace GRU_P
 {
+    using PlayerRoles;
+
     public class EventHandlers
     {
         private Config cfg;
         private CoroutineHandle timerCoroutine = new CoroutineHandle();
-        private new Vector3 EscapeZone = Vector3.zero;
+        private Vector3 EscapeZone => Escape.WorldPos;
         private bool SHSpawned = false;
 
         
@@ -30,7 +32,7 @@ namespace GRU_P
                 Timing.KillCoroutines(timerCoroutine);
             }
 
-            API.escapedCount = 0;
+            API.Escaped = 0;
             timerCoroutine = Timing.RunCoroutine(CheckEscape());
         }
         
@@ -44,11 +46,8 @@ namespace GRU_P
 
                     foreach (Player player in Player.List)
                     {
-                        if (EscapeZone == Vector3.zero)
-                            EscapeZone = player.GameObject.GetComponent<Escape>().worldPosition;
-
-                        if (!player.IsCuffed || (player.Role.Team == Team.SCP && player.Role.Team == Team.RIP && player.Role.Team == Team.TUT) ||
-                            (EscapeZone - player.Position).sqrMagnitude > 400f)
+                        if (!player.IsCuffed || (player.Role.Team == Team.SCPs && player.Role.Team == Team.Dead && player.Role.Team == Team.OtherAlive) ||
+                            (EscapeZone - player.Position).sqrMagnitude > 156.5f)
                             continue;
 
                         if (!API.IsGRUP(player.Cuffer))
@@ -56,7 +55,7 @@ namespace GRU_P
                             continue;
                         }
 
-                        API.escapedCount += 1;
+                        API.Escaped += 1;
                         List < Item > items = player.Items.ToList();
                         API.SpawnPlayer(player, "agent");
                         Timing.WaitForSeconds(1);
@@ -71,13 +70,13 @@ namespace GRU_P
 
         public void OnEndingRound(EndingRoundEventArgs ev)
         {
-            bool scpAlive = API.CountRoles(Team.SCP) > 0;
+            bool scpAlive = API.CountRoles(Team.SCPs) > 0;
             bool grupAlive = API.GetGRUPPlayers().Count > 0;
 
             if (grupAlive && scpAlive)
             {
                 ev.IsAllowed = false;
-            }else if (grupAlive && API.escapedCount > 0)
+            }else if (grupAlive && API.Escaped > 0)
             {
                 Map.ShowHint("GRU-P also won!", 7);
             }
@@ -93,34 +92,31 @@ namespace GRU_P
         
         public void OnAnnouncingScpTerminationEvent(AnnouncingScpTerminationEventArgs ev)
         {
-            if (API.IsGRUP(ev.Killer) && ev.Player.Role.Team == Team.SCP)
+            if (API.IsGRUP(ev.Killer) && ev.Player.Role.Team == Team.SCPs)
             {
                 ev.IsAllowed = false;
                 string scpType = null;
                 switch (ev.Player.Role.Type)
                 {
-                    case RoleType.Scp096:
+                    case RoleTypeId.Scp096:
                         scpType = "SCP 0 9 6";
                         break;
-                    case RoleType.Scp049:
+                    case RoleTypeId.Scp049:
                         scpType = "SCP 0 4 9";
                         break;
-                    case RoleType.Scp079:
+                    case RoleTypeId.Scp079:
                         scpType = "SCP 0 7 9";
                         break;
-                    case RoleType.Scp173:
+                    case RoleTypeId.Scp173:
                         scpType = "SCP 1 7 3";
                         break;
-                    case RoleType.Scp93989:
-                        scpType = "SCP 9 3 9-8 9";
+                    case RoleTypeId.Scp939:
+                        scpType = "SCP 9 3 9";
                         break;
-                    case RoleType.Scp93953:
-                        scpType = "SCP 9 3 9-5 3";
-                        break;
-                    case RoleType.Scp106:
+                    case RoleTypeId.Scp106:
                         scpType = "SCP 1 0 6";
                         break;
-                    case RoleType.Scp0492:
+                    case RoleTypeId.Scp0492:
                         scpType = null;
                         break;
                 }
@@ -131,7 +127,7 @@ namespace GRU_P
 
         public void OnChangingRole(ChangingRoleEventArgs ev)
         {
-            if (API.IsGRUP(ev.Player) && ev.NewRole != RoleType.Tutorial)
+            if (API.IsGRUP(ev.Player) && ev.NewRole != RoleTypeId.Tutorial)
                 API.DestroyGRUP(ev.Player);
         }
 

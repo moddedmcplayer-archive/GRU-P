@@ -6,6 +6,8 @@ using Exiled.Permissions.Extensions;
 
 namespace GRU_P.Commands.Subcmds
 {
+    using PlayerRoles;
+
     public class SpawnTeam : ICommand
     {
         public string Command { get; } = "spawnTeam";
@@ -22,7 +24,7 @@ namespace GRU_P.Commands.Subcmds
                 return false;
             }
             
-            int spectators = Player.List.Where(x => x.Role.Team == Team.RIP && !x.IsOverwatchEnabled).ToList()
+            int spectators = Player.List.Where(x => x.Role.Team == Team.Dead && !x.IsOverwatchEnabled).ToList()
                 .Count;
             if (arguments.Count == 0)
             {

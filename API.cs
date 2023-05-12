@@ -10,22 +10,19 @@ using UnityEngine;
 
 namespace GRU_P
 {
+    using PlayerRoles;
+
     public static class API
     {
-        private static Plugin plugin = Plugin.Singleton;
-        private static Config cfg = Plugin.Singleton.Config;
-            
+        private static Config cfg => Plugin.Singleton.Config;
         public static bool IsGRUP(Player player) => player != null && player.SessionVariables.ContainsKey("IsGRUP");
         public static string GetGRUPType(Player player) => player.SessionVariables["IsGRUP"].ToString();
         public static List<Player> GetGRUPPlayers() => Player.List.Where(x => x.SessionVariables.ContainsKey("IsGRUP")).ToList();
         public static int CountRoles(Team team) => Player.List.Count(x => x.Role.Team == team && !x.SessionVariables.ContainsKey("IsNPC"));
 
-        public static int escapedCount = 0;
+        public static int Escaped = 0;
 
-        
-        private static int s => 2;
-
-        public static void modifyKeycard(Player player, CustomItem cItem)
+        public static void ModifyKeycard(Player player, CustomItem cItem)
         {
             foreach (Item item in player.Items)
             {
@@ -47,7 +44,7 @@ namespace GRU_P
         public static void SpawnPlayer(Player player, string type)
         {
             player.SessionVariables.Add("IsGRUP", type);
-            player.Role.Type = RoleType.Tutorial;
+            player.Role.Type = RoleTypeId.Tutorial;
             player.Health = 100;
             player.MaxHealth = 100;
             player.UnitName = $"GRUP-{UnityEngine.Random.Range(1, 50)}";
@@ -84,14 +81,14 @@ namespace GRU_P
             });
             Timing.CallDelayed(1.7f, () => player.Position = new Vector3(-31f, 989f, -50f));
             if(Plugin.Singleton.Config.SpawnItemsAgent.Contains("GRU-P-Keycard"))
-                Timing.CallDelayed(1, () => API.modifyKeycard(player, CustomItem.Get(1)));
+                Timing.CallDelayed(1, () => API.ModifyKeycard(player, CustomItem.Get(1)));
             Timing.CallDelayed(1.0f, () => player.Broadcast(7, $"Youre now a GRU-P {type}, for more information type .grup-help in the console"));
         }
 
         public static void SpawnSquad(int size)
         {
-            List<Player> spec = Player.List.Where(x => x.Role.Team == Team.RIP && !x.IsOverwatchEnabled).ToList();
-            spec = spec.OrderBy(x => x.ReferenceHub.characterClassManager.DeathTime).ToList();
+            List<Player> spec = Player.List.Where(x => x.Role.Team == Team.Dead && !x.IsOverwatchEnabled).ToList();
+            spec = spec.OrderByDescending(x => x.ReferenceHub.roleManager.CurrentRole.ActiveTime).ToList();
             int spawned = 0;
             string type = "trooper";
             SpawnPlayer(spec[spec.Count-1], "commissar");

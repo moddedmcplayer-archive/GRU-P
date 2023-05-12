@@ -33,7 +33,7 @@ namespace GRU_P.Items
 
         private void OnPickingUpItem(PickingUpItemEventArgs ev)
         {
-            Timing.CallDelayed(1, () => API.modifyKeycard(ev.Player, this));
+            Timing.CallDelayed(1, () => API.ModifyKeycard(ev.Player, this));
         }
     }
 }
