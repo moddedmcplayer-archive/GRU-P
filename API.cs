@@ -79,14 +79,14 @@ namespace GRU_P
                         break;
                 }
             });
-            Timing.CallDelayed(1.7f, () => player.Position = new Vector3(-31f, 989f, -50f));
+            Timing.CallDelayed(1.7f, () => player.Position = Plugin.Singleton.Config.SpawnPoint);
             if(Plugin.Singleton.Config.SpawnItemsAgent.Contains("GRU-P-Keycard"))
                 Timing.CallDelayed(1, () => ModifyKeycard(player, CustomItem.Get(1u)));
-            if (Plugin.Singleton.Config.helpMessage)
-                Timing.CallDelayed(1.0f, () => player.Broadcast(7, $"Youre now a GRU-P {type}, for more information type [.grup help] in the console"));
+            if (Plugin.Singleton.Config.EnableSpawnMessage)
+                Timing.CallDelayed(1.0f, () => player.Broadcast(7, Plugin.Singleton.Config.SpawnMessage.Replace("%type%", type)));
         }
 
-        public static void SpawnSquad(int size)
+        public static void SpawnSquad(int size, bool silent = false)
         {
             List<Player> spec = Player.List.Where(x => x.Role.Team == Team.Dead && !x.IsOverwatchEnabled).ToList();
             spec = spec.OrderByDescending(x => x.ReferenceHub.roleManager.CurrentRole.ActiveTime).ToList();
@@ -103,6 +103,11 @@ namespace GRU_P
                 {
                     type = "agent";
                 }
+            }
+
+            if (Plugin.Singleton.Config.EnableSpawnCassie)
+            {
+                
             }
         }
         

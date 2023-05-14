@@ -23,7 +23,12 @@ namespace GRU_P.Commands.Subcmds
                 response = "You don't have permission to execute this command. Required permission: grup.spawnteam";
                 return false;
             }
-            
+
+            bool silent = arguments.Any(x => x.ToLower().Contains("silent"));
+            if (silent)
+                response = "Silently";
+            else
+                response = string.Empty;
             int spectators = Player.List.Where(x => x.Role.Team == Team.Dead && !x.IsOverwatchEnabled).ToList()
                 .Count;
             if (arguments.Count == 0)
@@ -36,23 +41,23 @@ namespace GRU_P.Commands.Subcmds
 
                 if (spectators > cfg.maxSquadSize)
                 {
-                    API.SpawnSquad(cfg.maxSquadSize);
-                    response = "Spawned a GRU-P squad!";
+                    API.SpawnSquad(cfg.maxSquadSize, silent);
+                    response += "Spawned a GRU-P squad!";
                 }
-                API.SpawnSquad(spectators);
-                response = "Spawned a GRU-P squad!";
+                API.SpawnSquad(spectators, silent);
+                response += "Spawned a GRU-P squad!";
                 return true;
             }
 
             int size = int.Parse(arguments.At(0));
             if (size > spectators)
             {
-                API.SpawnSquad(spectators);
-                response = $"Spawned a GRU-P squad with {spectators} players";
+                API.SpawnSquad(spectators, silent);
+                response += $"Spawned a GRU-P squad with {spectators} players";
                 return true;
             }
-            API.SpawnSquad(size);
-            response = $"Spawned a GRU-P squad with {size} players";
+            API.SpawnSquad(size, silent);
+            response += $"Spawned a GRU-P squad with {size} players";
             return true;
         }
     }

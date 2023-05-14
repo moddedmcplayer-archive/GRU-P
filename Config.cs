@@ -6,6 +6,8 @@ using GRU_P.Items;
 
 namespace GRU_P
 {
+    using UnityEngine;
+
     public class Config : IConfig
     {
         public bool IsEnabled { get; set; } = true;
@@ -18,7 +20,10 @@ namespace GRU_P
         public int differenceTickets = 5;
 
         [Description("Whether or not to display the help message hint on spawn")]
-        public bool helpMessage = true;
+        public bool EnableSpawnMessage = true;
+
+        public string SpawnMessage { get; set; } =
+            "Youre now a GRU-P %type%, for more information type [.grup help] in the console";
 
         [Description("Chance of gru-p spawning")]
         public int Chance = 50;
@@ -95,5 +100,10 @@ namespace GRU_P
             KeycardPermissions.ExitGates,
             KeycardPermissions.Intercom,
         };
+
+        public Vector3 SpawnPoint { get; set; } = new Vector3(-36f, 991f, -36f);
+        public bool EnableSpawnCassie { get; set; } = true;
+        public bool EnableSubtitles { get; set; } = true;
+        public string SpawnCassie { get; set; } = "G R U division P squad has entered the facility";
     }
 }
