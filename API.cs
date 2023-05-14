@@ -107,7 +107,7 @@ namespace GRU_P
 
             if (Plugin.Singleton.Config.EnableSpawnCassie)
             {
-                
+                Cassie.Message(Plugin.Singleton.Config.SpawnCassie, false, true, Plugin.Singleton.Config.EnableSubtitles);
             }
         }
         

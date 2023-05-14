@@ -105,5 +105,11 @@ namespace GRU_P
         public bool EnableSpawnCassie { get; set; } = true;
         public bool EnableSubtitles { get; set; } = true;
         public string SpawnCassie { get; set; } = "G R U division P squad has entered the facility";
+        public List<string> HelpCommandMessages { get; set; } = new List<string>
+        {
+            "The GRU-P are only hostile to SCPs, but neutral to everyone else.",
+            "The hierarchy is as follows: Commissar > Trooper > Agent.",
+            $"They spawn when the spawn ticket difference between MTF and CI is less than {Plugin.Singleton.Config.differenceTickets}."
+        };
     }
 }
