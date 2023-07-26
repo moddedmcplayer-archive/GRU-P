@@ -1,15 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Runtime.CompilerServices;
-using System.Text;
-using System.Threading.Tasks;
-using Exiled.API;
 using Exiled.API.Features;
 using Exiled.CustomItems.API;
-using Exiled.Events.Extensions;
-using Exiled.Events.Handlers;
-using GRU_P.Items;
 using Player = Exiled.Events.Handlers.Player;
 using Server = Exiled.Events.Handlers.Server;
 using Map = Exiled.Events.Handlers.Map;
@@ -50,7 +41,8 @@ namespace GRU_P
             Server.EndingRound += EventHandler.OnEndingRound;
             Server.RoundStarted += EventHandler.OnRoundStarted;
             Map.AnnouncingScpTermination += EventHandler.OnAnnouncingScpTerminationEvent;
-            
+            Player.Escaping += EventHandler.OnEscaping;
+
             Config.CustomCard.Register();
         }
 
@@ -62,8 +54,9 @@ namespace GRU_P
             Server.EndingRound -= EventHandler.OnEndingRound;
             Server.RoundStarted -= EventHandler.OnRoundStarted;
             Map.AnnouncingScpTermination -= EventHandler.OnAnnouncingScpTerminationEvent;
+            Player.Escaping -= EventHandler.OnEscaping;
             EventHandler = null;
-            
+
             Config.CustomCard.Unregister();
         }
     }

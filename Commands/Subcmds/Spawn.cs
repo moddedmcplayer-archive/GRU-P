@@ -11,8 +11,6 @@ namespace GRU_P.Commands.Subcmds
         public string[] Aliases { get; } = {"s"};
         public string Description { get; } = "Makes player a GRU-P Agent";
 
-        public string[] types = {"commissar", "agent", "trooper"};
-
         public bool Execute(ArraySegment<string> arguments, ICommandSender sender, out string response)
         {
             if (!sender.CheckPermission("grup.spawn"))
@@ -21,13 +19,13 @@ namespace GRU_P.Commands.Subcmds
                 return false;
             }
             
-            if (arguments.Count == 0)
+            if (arguments.Count == 0 && Plugin.Singleton.Config.Classes.TryGetValue("Commissar", out var commissar))
             {
                 Player ply = Player.Get(sender);
 
                 if (API.IsGRUP(ply))
                 {
-                    if (API.GetGRUPType(ply) == "commissar")
+                    if (API.GetGRUPType(ply).ToLower() == "commissar")
                     {
                         response = $"You are already a GRU-P commissar!";
                         return false;
@@ -35,7 +33,7 @@ namespace GRU_P.Commands.Subcmds
                     ply.SessionVariables.Remove("IsGRUP");
                 }
 
-                API.SpawnPlayer(ply, "commissar");
+                API.SpawnPlayer(ply, commissar);
                 response = "You are now a GRU-P commissar.";
                 return true;
             }
@@ -46,7 +44,7 @@ namespace GRU_P.Commands.Subcmds
             {
                 Player ply = Player.Get(sender);
                 
-                if (!types.Contains(type))
+                if (!Plugin.Singleton.Config.Classes.TryGetValue(type, out var @class))
                 {
                     response = "Invalid argument. Please enter a valid type!";
                     return false;
@@ -61,7 +59,7 @@ namespace GRU_P.Commands.Subcmds
                     }
                     ply.SessionVariables.Remove("IsGRUP");
                 }
-                API.SpawnPlayer(ply, type);
+                API.SpawnPlayer(ply, @class);
                 response = $"You are now a GRU-P {type}.";
                 return true;
             }
@@ -74,7 +72,7 @@ namespace GRU_P.Commands.Subcmds
                 return false;
             }
             
-            if (!types.Contains(type))
+            if (!Plugin.Singleton.Config.Classes.TryGetValue(type, out var class2))
             {
                 response = "Invalid argument. Please enter a valid type!";
                 return false;
@@ -90,7 +88,7 @@ namespace GRU_P.Commands.Subcmds
                 player.SessionVariables.Remove("IsGRUP");
             }
 
-            API.SpawnPlayer(player, type);
+            API.SpawnPlayer(player, class2);
             response = $"({player.Id}) {player.Nickname} is now a GRU-P {type}.";
             return true;
             

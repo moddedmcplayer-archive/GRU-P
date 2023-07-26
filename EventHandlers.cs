@@ -1,74 +1,27 @@
-﻿using System.Collections.Generic;
-using System.Linq;
-using System.Timers;
-using Exiled.API.Enums;
-using Exiled.API.Features;
-using Exiled.API.Features.DamageHandlers;
-using Exiled.API.Features.Items;
-using Exiled.CustomItems.API.Features;
-using Exiled.Events.EventArgs;
-using Hints;
-using MEC;
-using Respawning;
-using UnityEngine;
+﻿using Exiled.API.Features;
 
 namespace GRU_P
 {
+    using System.Collections.Generic;
+    using System.Linq;
+    using Exiled.API.Features.Items;
     using Exiled.Events.EventArgs.Map;
     using Exiled.Events.EventArgs.Player;
     using Exiled.Events.EventArgs.Server;
+    using MEC;
     using PlayerRoles;
+    using Respawning;
 
     public class EventHandlers
     {
         private Config cfg;
-        private CoroutineHandle timerCoroutine = new CoroutineHandle();
-        private Vector3 EscapeZone => Escape.WorldPos;
         private bool SHSpawned = false;
 
         
         public void OnRoundStarted()
         {
             SHSpawned = false;
-            if (timerCoroutine.IsRunning)
-            {
-                Timing.KillCoroutines(timerCoroutine);
-            }
-
             API.Escaped = 0;
-            timerCoroutine = Timing.RunCoroutine(CheckEscape());
-        }
-        
-        private IEnumerator<float> CheckEscape()
-        {
-            while (Round.IsStarted)
-            {
-                for (;;)
-                {
-                    yield return Timing.WaitForSeconds(1.5f);
-
-                    foreach (Player player in Player.List)
-                    {
-                        if (!player.IsCuffed || (player.Role.Team == Team.SCPs && player.Role.Team == Team.Dead && player.Role.Team == Team.OtherAlive) ||
-                            (EscapeZone - player.Position).sqrMagnitude > 156.5f)
-                            continue;
-
-                        if (!API.IsGRUP(player.Cuffer))
-                        {
-                            continue;
-                        }
-
-                        API.Escaped += 1;
-                        List < Item > items = player.Items.ToList();
-                        API.SpawnPlayer(player, "agent");
-                        Timing.WaitForSeconds(1);
-                        foreach (Item item in items)
-                        {
-                            item.CreatePickup(player.Position);
-                        }
-                    }
-                }
-            }
         }
 
         public void OnEndingRound(EndingRoundEventArgs ev)
@@ -121,7 +74,6 @@ namespace GRU_P
                         scpType = "SCP 1 0 6";
                         break;
                     case RoleTypeId.Scp0492:
-                        scpType = null;
                         break;
                 }
                 if(scpType != null)
@@ -139,31 +91,51 @@ namespace GRU_P
         {
             if (!SHSpawned)
             {
-                foreach (var Player in Player.List)
+                foreach (var ply in Player.List)
                 {
-                    if (Player.SessionVariables.ContainsKey("IsSH"))
+                    if (ply.SessionVariables.ContainsKey("IsSH"))
                         SHSpawned = false;
                 }
             }
-            
+
             if(SHSpawned)
                 return;
-            
+
             if ((Respawn.NtfTickets - Respawn.ChaosTickets) < cfg.differenceTickets || (Respawn.ChaosTickets - Respawn.NtfTickets) < cfg.differenceTickets)
             {
                 if(UnityEngine.Random.Range(1, 101) > Plugin.Singleton.Config.Chance)
                 {
                     ev.IsAllowed = false;
-                    Respawn.NtfTickets -= 2;
+                    RespawnTokensManager.RemoveTokens(SpawnableTeamType.NineTailedFox, 2);
                     Respawn.ChaosTickets += 2;
                     API.SpawnSquad(ev.Players.Count);
                 }
             }
         }
-        
+
         public EventHandlers(Plugin plugin)
         {
             cfg = plugin.Config;
+        }
+
+        public void OnEscaping(EscapingEventArgs ev)
+        {
+            if (!API.IsGRUP(ev.Player.Cuffer))
+            {
+                return;
+            }
+
+            ev.IsAllowed = false;
+            API.Escaped += 1;
+            List<Item> items = ev.Player.Items.ToList();
+            API.SpawnPlayer(ev.Player, cfg.Classes[cfg.EscapeClass]);
+            Timing.CallDelayed(1f, () =>
+            {
+                foreach (Item item in items)
+                {
+                    item.CreatePickup(ev.Player.Position);
+                }
+            });
         }
     }
 }
