@@ -5,6 +5,8 @@ using Exiled.API.Features;
 
 namespace GRU_P.Commands.Subcmds
 {
+    using GRU_P.Models;
+
     public class Spawn : ICommand
     {
         public string Command { get; } = "spawn";
@@ -18,9 +20,15 @@ namespace GRU_P.Commands.Subcmds
                 response = "You don't have permission to execute this command. Required permission: grup.spawn";
                 return false;
             }
-            
-            if (arguments.Count == 0 && Plugin.Singleton.Config.Classes.TryGetValue("Commissar", out var commissar))
+
+            GRUPClass? @class;
+            if (arguments.Count == 0)
             {
+                if ((@class = Plugin.GetClass("Commissar")) == null)
+                {
+                    response = "Cannot find Commissar class, please specify type!";
+                    return false;
+                }
                 Player ply = Player.Get(sender);
 
                 if (API.IsGRUP(ply))
@@ -33,20 +41,18 @@ namespace GRU_P.Commands.Subcmds
                     ply.SessionVariables.Remove("IsGRUP");
                 }
 
-                API.SpawnPlayer(ply, commissar);
+                API.SpawnPlayer(ply, @class);
                 response = "You are now a GRU-P commissar.";
                 return true;
             }
-            
-            string type = arguments.At(0).ToLower();
 
+            string type = arguments.At(0).ToLower();
             if (arguments.Count == 1)
             {
                 Player ply = Player.Get(sender);
-                
-                if (!Plugin.Singleton.Config.Classes.TryGetValue(type, out var @class))
+                if ((@class = Plugin.GetClass(type)) == null)
                 {
-                    response = "Invalid argument. Please enter a valid type!";
+                    response = $"Invalid argument. Please enter a valid type! Valid: {string.Join(", ", Plugin.Singleton.Config.Classes.Keys)}";
                     return false;
                 }
 
@@ -63,16 +69,15 @@ namespace GRU_P.Commands.Subcmds
                 response = $"You are now a GRU-P {type}.";
                 return true;
             }
-            
+
             Player player = Player.Get(arguments.At(1));
-            
             if (player == null)
             {
                 response = "Invalid argument. Please give player's id or nickname!";
                 return false;
             }
-            
-            if (!Plugin.Singleton.Config.Classes.TryGetValue(type, out var class2))
+
+            if ((@class = Plugin.GetClass(type)) == null)
             {
                 response = "Invalid argument. Please enter a valid type!";
                 return false;
@@ -88,7 +93,7 @@ namespace GRU_P.Commands.Subcmds
                 player.SessionVariables.Remove("IsGRUP");
             }
 
-            API.SpawnPlayer(player, class2);
+            API.SpawnPlayer(player, @class);
             response = $"({player.Id}) {player.Nickname} is now a GRU-P {type}.";
             return true;
             

@@ -7,6 +7,9 @@ using Map = Exiled.Events.Handlers.Map;
 
 namespace GRU_P
 {
+    using System.Linq;
+    using GRU_P.Models;
+
     public class Plugin : Plugin<Config>
     {
         public static Plugin Singleton;
@@ -14,9 +17,9 @@ namespace GRU_P
         public override string Author { get; } = "moddedmcplayer";
         public override string Name { get; } = "GRU-P";
         public override Version Version { get; } = new Version(1, 2, 0);
-        public override Version RequiredExiledVersion { get; } = new Version(7, 0, 0);
+        public override Version RequiredExiledVersion { get; } = new Version(8, 0, 0);
 
-        public EventHandlers EventHandler;
+        public EventHandlers? EventHandler;
 
         public override void OnEnabled()
         {
@@ -27,7 +30,7 @@ namespace GRU_P
 
         public override void OnDisabled()
         {
-            Singleton = null;
+            Singleton = null!;
             UnRegisterEvents();
             base.OnDisabled();
         }
@@ -58,6 +61,11 @@ namespace GRU_P
             EventHandler = null;
 
             Config.CustomCard.Unregister();
+        }
+
+        public static GRUPClass? GetClass(string name)
+        {
+            return Singleton.Config.Classes.FirstOrDefault(x => string.Equals(x.Key, name, StringComparison.InvariantCultureIgnoreCase)).Value;
         }
     }
 }
