@@ -14,7 +14,7 @@ namespace GRU_P.Models
 
         public string GetName()
         {
-            return Plugin.Singleton.Config.Classes.FirstOrDefault(x => x.Value == this).Key ?? string.Empty;
+            return Plugin.Singleton.Config.Classes.FirstOrDefault(x => x.Value == this).Key ?? "notfound";
         }
     }
 }

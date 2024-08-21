@@ -48,7 +48,7 @@ namespace GRU_P
             player.Role.Set(RoleTypeId.Tutorial);
             player.Health = 100;
             player.MaxHealth = 100;
-            player.CustomInfo = $"GRUP-{UnityEngine.Random.Range(1, 50)}";
+            player.CustomInfo = $"GRU-P {type.GetName()}";
 
             player.ReferenceHub.nicknameSync.ShownPlayerInfo &= ~PlayerInfoArea.UnitName;
             player.ReferenceHub.nicknameSync.ShownPlayerInfo &= ~PlayerInfoArea.Role;

@@ -10,18 +10,15 @@ namespace GRU_P
     using Exiled.Events.EventArgs.Server;
     using MEC;
     using PlayerRoles;
-    using Respawning;
 
     public class EventHandlers
     {
         private Config cfg;
-        private bool SHSpawned = false;
 
-        
         public void OnRoundStarted()
         {
-            SHSpawned = false;
             API.Escaped = 0;
+            lastSpawnGRUP = false;
         }
 
         public void OnEndingRound(EndingRoundEventArgs ev)
@@ -87,27 +84,21 @@ namespace GRU_P
                 API.DestroyGRUP(ev.Player);
         }
 
+        private bool lastSpawnGRUP = false;
         public void OnSpawn(RespawningTeamEventArgs ev)
         {
-            if (!SHSpawned)
+            if (lastSpawnGRUP)
             {
-                foreach (var ply in Player.List)
-                {
-                    if (ply.SessionVariables.ContainsKey("IsSH"))
-                        SHSpawned = false;
-                }
-            }
-
-            if(SHSpawned)
+                lastSpawnGRUP = false;
                 return;
+            }
 
             if ((Respawn.NtfTickets - Respawn.ChaosTickets) < cfg.differenceTickets || (Respawn.ChaosTickets - Respawn.NtfTickets) < cfg.differenceTickets)
             {
                 if(UnityEngine.Random.Range(1, 101) > Plugin.Singleton.Config.Chance)
                 {
                     ev.IsAllowed = false;
-                    RespawnTokensManager.RemoveTokens(SpawnableTeamType.NineTailedFox, 2);
-                    Respawn.ChaosTickets += 2;
+                    lastSpawnGRUP = true;
                     API.SpawnSquad(ev.Players.Count);
                 }
             }
