@@ -30,12 +30,12 @@ namespace GRU_P
             {
                 ev.IsRoundEnded = false;
             }
-            else if (grupAlive && API.Escaped > 0)
+            else if (ev.IsRoundEnded && grupAlive && API.Escaped > 0)
             {
                 Map.ShowHint("GRU-P also won!", 7);
             }
         }
-        
+
         public void OnDied(DiedEventArgs ev)
         {
             if (API.IsGRUP(ev.Player))

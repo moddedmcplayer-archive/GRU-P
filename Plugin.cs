@@ -8,6 +8,7 @@ using Map = Exiled.Events.Handlers.Map;
 namespace GRU_P
 {
     using System.Linq;
+    using Exiled.API.Enums;
     using GRU_P.Models;
 
     public class Plugin : Plugin<Config>
@@ -18,6 +19,7 @@ namespace GRU_P
         public override string Name { get; } = "GRU-P";
         public override Version Version { get; } = new Version(1, 2, 0);
         public override Version RequiredExiledVersion { get; } = new Version(8, 0, 0);
+        public override PluginPriority Priority { get; } = PluginPriority.Higher;
 
         public EventHandlers? EventHandler;
 
