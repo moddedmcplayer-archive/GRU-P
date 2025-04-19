@@ -17,8 +17,8 @@ namespace GRU_P
         [Description("Maximum size of a spawn wave")]
         public int maxSquadSize { get; set; } = 10;
 
-        [Description("The maximum difference between mtf & chaos tickets to trigger GRU-P spawn")]
-        public int differenceTickets { get; set; } = 5;
+        [Description("The maximum difference between mtf & chaos influence to trigger GRU-P spawn")]
+        public float DifferenceInfluence { get; set; } = 5;
 
         [Description("Whether or not to display the help message hint on spawn")]
         public bool EnableSpawnMessage { get; set; } = true;

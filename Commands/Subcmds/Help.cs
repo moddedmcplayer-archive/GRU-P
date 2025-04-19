@@ -15,7 +15,7 @@ namespace GRU_P.Commands.Subcmds
             Player ply = Player.Get(sender);
             foreach (var msg in Plugin.Singleton.Config.HelpCommandMessages)
             {
-                ply.Broadcast(8, msg.Replace("%ticketdiff%", Plugin.Singleton.Config.differenceTickets.ToString()));
+                ply.Broadcast(8, msg.Replace("%ticketdiff%", Plugin.Singleton.Config.DifferenceInfluence.ToString()));
             }
             response = "Displayed help message";
             return true;

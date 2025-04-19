@@ -2,6 +2,7 @@
 
 namespace GRU_P
 {
+    using System;
     using System.Collections.Generic;
     using System.Linq;
     using Exiled.API.Features.Items;
@@ -28,9 +29,9 @@ namespace GRU_P
 
             if (grupAlive && scpAlive)
             {
-                ev.IsRoundEnded = false;
+                ev.IsAllowed = false;
             }
-            else if (ev.IsRoundEnded && grupAlive && API.Escaped > 0)
+            else if (ev.IsAllowed && grupAlive && API.Escaped > 0)
             {
                 Map.ShowHint("GRU-P also won!", 7);
             }
@@ -93,14 +94,16 @@ namespace GRU_P
                 return;
             }
 
-            if ((Respawn.NtfTickets - Respawn.ChaosTickets) < cfg.differenceTickets || (Respawn.ChaosTickets - Respawn.NtfTickets) < cfg.differenceTickets)
+            float ntfInfluence = Respawn.GetInfluence(Faction.FoundationStaff);
+            float chaosInfluence = Respawn.GetInfluence(Faction.FoundationEnemy);
+            if (Math.Abs(ntfInfluence - chaosInfluence) <= cfg.DifferenceInfluence)
             {
-                if(UnityEngine.Random.Range(1, 101) > Plugin.Singleton.Config.Chance)
-                {
-                    ev.IsAllowed = false;
-                    lastSpawnGRUP = true;
-                    API.SpawnSquad(ev.Players.Count);
-                }
+                if (UnityEngine.Random.Range(1, 101) <= Plugin.Singleton.Config.Chance)
+                    return;
+
+                ev.IsAllowed = false;
+                lastSpawnGRUP = true;
+                API.SpawnSquad(ev.Players.Count);
             }
         }
 
